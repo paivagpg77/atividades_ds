@@ -1,0 +1,91 @@
+table material {
+  id uuid [pk]
+  nome_item varchar [not null]
+  id_categoria uuid [ref:> categoria.id]
+  peso int [not null]
+}
+
+table categoria {
+  id uuid [pk]
+  nome varchar [not null]
+}
+
+table clientes {
+  id uuid [pk]
+  nome varchar [not null]
+  cpf varchar [not null]
+  numero varchar [not null]
+}
+
+table pedido{
+  id uuid [pk]
+  id_cliente uuid [ref:> clientes.id]
+  data_pedido datetime [not null]
+  fim_aluguel datetime [not null]
+  id_itens uuid [ref:> pedido_item.id]
+}
+
+table pedido_item{
+  id uuid [pk]
+  id_pedido uuid [ref:> pedido.id]
+  id_material uuid [ref:> material.id]
+  quantidade int [not null]
+}
+
+table combo {
+  id uuid [pk]
+  nome varchar [not null]
+}
+
+table combo_itens {
+  id uuid [pk]
+  id_material uuid [ref:> material.id]
+  id_combo uuid [ref:> combo.id]
+  qntd int [not null]
+}
+
+
+table caminhao {
+  id uuid [pk]
+  placa varchar [not null, unique]
+  cor varchar [not null]
+  limite_peso int [not null]
+}
+
+table motorista {
+  id uuid [pk]
+  nome varchar [not null]
+  cpf varchar [not null, unique]
+  numero_cnh varchar [not null, unique]
+}
+
+table entrega {
+  id uuid [pk]
+  id_demanda uuid [ref :> pedido.id]
+  id_motorista uuid [ref:> motorista.id]
+  id_caminhao uuid [ref:> caminhao.id]
+  data_entrega datetime [not null]
+}
+
+table manutencao {
+  id uuid [pk]
+  id_material uuid [ref: > material.id]
+  data_inicio datetime
+  data_fim datetime
+  custo decimal
+  descricao varchar
+}
+
+table pagamento {
+  id uuid [pk]
+  id_pedido uuid [ref :> pedido.id]
+  valor_total decimal [not null]
+}
+
+table parcela {
+  id uuid [pk]
+  id_pagamento uuid [ref:> pagamento.id]
+  quantidade_parcelas int [not null]
+  data_vencimento datetime [not null]
+  data_pagamento datetime [not null]
+}
